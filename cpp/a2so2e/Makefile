@@ -1,0 +1,42 @@
+# Compiler
+CXX = g++
+CXXFLAGS = -fPIC -Wall
+
+# Files
+STATIC_SRC = static.cpp
+SHARED_SRC = shared.cpp
+E_SRC = e.cpp
+
+# Targets
+STATIC_LIB = libstatic.a
+SHARED_OBJ = shared.o
+SHARED_LIB = libshared.so
+E_OBJ = e.o
+EXEC = final_executable
+
+all: $(EXEC)
+
+# Compile static.cpp to a static library (.a)
+$(STATIC_LIB): $(STATIC_SRC)
+	$(CXX) $(CXXFLAGS) -c $< -o static.o
+	ar rcs $@ static.o
+
+# Compile shared.cpp to an object file
+$(SHARED_OBJ): $(SHARED_SRC)
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+# Link shared.o and static library to create the shared object (.so)
+$(SHARED_LIB): $(SHARED_OBJ) $(STATIC_LIB)
+	$(CXX) -shared -o $@ $(SHARED_OBJ) -L. -lstatic
+
+# Compile e.cpp to an object file
+$(E_OBJ): $(E_SRC)
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+# Link e.o with the shared library to create the final executable
+$(EXEC): $(E_OBJ) $(SHARED_LIB)
+	$(CXX) -o $@ $(E_OBJ) -L. -lshared -no-pie
+
+clean:
+	rm -f *.o $(STATIC_LIB) $(SHARED_LIB) $(EXEC)
+
