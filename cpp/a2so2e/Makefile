@@ -1,9 +1,9 @@
 # Compiler
 CXX = g++
-CXXFLAGS = -fPIC -Wall
+CXXFLAGS = -Wall
 
 # Files
-STATIC_SRC = static.cpp
+STATIC_SRC = static.cpp static_exclude.cpp
 SHARED_SRC = shared.cpp
 E_SRC = e.cpp
 
@@ -17,9 +17,10 @@ EXEC = final_executable
 all: $(EXEC)
 
 # Compile static.cpp to a static library (.a)
-$(STATIC_LIB): $(STATIC_SRC)
-	$(CXX) $(CXXFLAGS) -c $< -o static.o
-	ar rcs $@ static.o
+$(STATIC_LIB): $(STATIC_SRC)  
+	$(CXX) $(CXXFLAGS) -c static.cpp -o static.o
+	$(CXX) $(CXXFLAGS) -c static_exclude.cpp -o static_exclude.o
+	ar rcs $@ static.o static_exclude.o
 
 # Compile shared.cpp to an object file
 $(SHARED_OBJ): $(SHARED_SRC)
