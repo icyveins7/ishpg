@@ -1,6 +1,6 @@
 # Compiler
 CXX = g++
-CXXFLAGS = -Wall -fvisibility=hidden
+CXXFLAGS = -Wall
 
 # Files
 STATIC_SRC = static.cpp static_exclude.cpp
@@ -28,7 +28,7 @@ $(SHARED_OBJ): $(SHARED_SRC)
 
 # Link shared.o and static library to create the shared object (.so)
 $(SHARED_LIB): $(SHARED_OBJ) $(STATIC_LIB)
-	$(CXX) -shared -o $@ $(SHARED_OBJ) -L. -Wl,--whole-archive -lstatic
+	$(CXX) -shared -o $@ $(SHARED_OBJ) -L. -Wl,--whole-archive -lstatic -Wl,--no-whole-archive
 
 # Compile e.cpp to an object file
 $(E_OBJ): $(E_SRC)
@@ -36,7 +36,7 @@ $(E_OBJ): $(E_SRC)
 
 # Link e.o with the shared library to create the final executable
 $(EXEC): $(E_OBJ) $(SHARED_LIB)
-	$(CXX) -o $@ $(E_OBJ) -L. -lshared
+	$(CXX) -fPIC -o $@ $(E_OBJ) -L. -lshared
 
 clean:
 	rm -f *.o $(STATIC_LIB) $(SHARED_LIB) $(EXEC)
