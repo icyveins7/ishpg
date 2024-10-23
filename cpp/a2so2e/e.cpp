@@ -1,4 +1,3 @@
-#include "static.h"
 #include "shared.h"
 #include <iostream>
 
