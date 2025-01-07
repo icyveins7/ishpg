@@ -29,7 +29,7 @@ $(SHARED_OBJ): $(SHARED_SRC)
 # Link shared.o and static library to create the shared object (.so)
 $(SHARED_LIB): $(SHARED_OBJ) $(STATIC_LIB)
 	# $(CXX) -shared -o $@ $(SHARED_OBJ) -L. -Wl,--whole-archive -lstatic -Wl,--no-whole-archive
-	$(CXX) -shared -o $@ $(SHARED_OBJ)
+	$(CXX) -fPIC -shared -o $@ $(SHARED_OBJ) -L. -lstatic
 
 # Compile e.cpp to an object file
 $(E_OBJ): $(E_SRC)
