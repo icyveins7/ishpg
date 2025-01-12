@@ -18,10 +18,10 @@ all: $(EXEC)
 
 # Compile static.cpp to a static library (.a)
 $(STATIC_LIB): $(STATIC_SRC)  
-	$(CXX) $(CXXFLAGS) -fvisibility=hidden -c static.cpp -o static.o
-	$(CXX) $(CXXFLAGS) -fvisibility=hidden -c static_exclude.cpp -o static_exclude.o
-	# $(CXX) $(CXXFLAGS) -c static.cpp -o static.o
-	# $(CXX) $(CXXFLAGS) -c static_exclude.cpp -o static_exclude.o
+	# $(CXX) $(CXXFLAGS) -fvisibility=hidden -c static.cpp -o static.o
+	# $(CXX) $(CXXFLAGS) -fvisibility=hidden -c static_exclude.cpp -o static_exclude.o
+	$(CXX) $(CXXFLAGS) -c static.cpp -o static.o
+	$(CXX) $(CXXFLAGS) -c static_exclude.cpp -o static_exclude.o
 	ar rcs $@ static.o static_exclude.o
 
 # Compile shared.cpp to an object file
@@ -31,8 +31,8 @@ $(SHARED_OBJ): $(SHARED_SRC)
 # Link shared.o and static library to create the shared object (.so)
 $(SHARED_LIB): $(SHARED_OBJ) $(STATIC_LIB)
 	# $(CXX) -shared -o $@ $(SHARED_OBJ) -L. -Wl,--whole-archive -lstatic -Wl,--no-whole-archive
-	$(CXX) -shared -o $@ $(SHARED_OBJ) -L. -lstatic
-	# $(CXX) -shared -o $@ $(SHARED_OBJ)
+	# $(CXX) -shared -o $@ $(SHARED_OBJ) -L. -lstatic
+	$(CXX) -shared -o $@ $(SHARED_OBJ)
 
 # Compile e.cpp to an object file
 $(E_OBJ): $(E_SRC)
